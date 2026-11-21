@@ -61,4 +61,4 @@ if c4.button("😢 Sad"):
 
 text = st.text_input("💬 Type your sentence here...", key="text", placeholder="e.g. I am very excited for my presentation...")
 
-if st.button("✨
+if st.button("Detect My Emotion"):
