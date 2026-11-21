@@ -62,3 +62,23 @@ if c4.button("😢 Sad"):
 text = st.text_input("💬 Type your sentence here...", key="text", placeholder="e.g. I am very excited for my presentation...")
 
 if st.button("Detect My Emotion"):
+    if text:
+        with st.spinner("AI is reading your feelings..."):
+            time.sleep(1)
+            x = vectorizer([text]).numpy()
+            probs = model.predict(x, verbose=0)[0]
+            result = {emotions[i]: float(probs[i]) for i in range(len(emotions))}
+            top = max(result, key=result.get)
+        emoji, color, msg = emotion_info.get(top.lower(), ("?", "#CCCCCC", "Detected!"))
+        conf = result[top] * 100
+        st.balloons()
+        st.markdown(f"<div style='background:{color}; padding:25px; border-radius:20px; text-align:center;'><div class='big-emoji'>{emoji}</div><h1>{top.upper()}</h1><h3>{msg}</h3><h2>Confidence: {conf:.1f}%</h2></div>", unsafe_allow_html=True)
+        st.write("")
+        st.markdown("### All Emotions Breakdown:")
+        st.progress(int(conf))
+        st.bar_chart(result)
+        st.success(f"AI is {conf:.1f}% sure you are feeling {top}")
+    else:
+        st.warning("Please type a sentence first!")
+st.markdown("---")
+st.markdown("<p style='text-align:center; color:#555;'>Made with Love | BiLSTM Deep Learning Model | Final Year Project</p>", unsafe_allow_html=True)
